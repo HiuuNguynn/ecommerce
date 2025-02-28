@@ -39,7 +39,7 @@
             <div class="wg-table table-all-user">
                 <div class="table-responsive">
                     @if (Session::has('status'))
-                        <p class="alter alter-success">{{ Session::get('status')}}</p>
+                        <p class="alert alert-success">{{ Session::get('status')}}</p>
                     @endif
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -72,15 +72,17 @@
                                                 <i class="icon-edit-3"></i>
                                             </div>
                                         </a>
-                                        <form action="#" method="POST">
-                                            <div class="item text-danger delete">
+                                        <form action="{{ route('admin.brand.delete', ['id' => $brand->id]) }}" method="POST" class="delete-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="item text-danger delete-button">
                                                 <i class="icon-trash-2"></i>
-                                            </div>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
-                            @endforeach <!-- Đóng vòng lặp -->
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -94,3 +96,26 @@
 </div>
 
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.delete-button').on('click', function(e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete this record?",
+                    icon: "warning",
+                    buttons: ["No", "Yes"],
+                    dangerMode: true,
+                }).then(function(result) {
+                    if (result) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
