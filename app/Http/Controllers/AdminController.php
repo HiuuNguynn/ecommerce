@@ -116,4 +116,31 @@ class AdminController extends Controller
         $categories = Category::orderBy('id', 'DESC') -> paginate(10);
         return view('admin.categories', compact('categories'));
     }
+
+    public function category_add() 
+    {
+        return view('admin.category-add');
+    }
+
+
+    public function caterory_store(Request $request)
+    {
+        $request -> validate([
+            'name' => 'required',
+            'slug' => 'required|unique:caterories,slug',
+            'image' => 'mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $category = new Category();
+        $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
+        $image = $request->file('image');
+        $file_extention = $request->file('image')->extension();
+        $file_name = Carbon::now()->timestamp.'.'.$file_extention;
+        $this->GenerateBrandThumbailsImage($image,$file_name);
+        $category->image = $file_name;
+        $category->save();
+        return redirect()->route('admin.brands')->with('status','Brand has been added succesfully!');
+
+    }
 }
