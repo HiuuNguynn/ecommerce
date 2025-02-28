@@ -6,6 +6,7 @@ use App\Models\Brand;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 
 class AdminController extends Controller
@@ -47,14 +48,55 @@ class AdminController extends Controller
         return redirect()->route('admin.brands')->with('status','Brand has been added succesfully!');
 
     }
+    public function brand_edit($id) {
+        $brand = Brand::find($id);
+        return view('admin.brand-edit', compact('brand'));
+    }
 
+    public function brand_update(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:brands,slug,' . $request->id,
+            'image' => 'mimes:png,jpg,jpeg|max:2048'
+        ]);
+    
+        $brand = Brand::find($request->id);
+        if (!$brand) {
+            return redirect()->back()->with('error', 'Brand not found.');
+        }
+    
+        $brand->name = $request->name;
+        $brand->slug = Str::slug($request->name);
+    
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($brand->image && File::exists(public_path('uploads/brands/' . $brand->image))) {
+                File::delete(public_path('uploads/brands/' . $brand->image));
+            }
+    
+            $image = $request->file('image');
+            $file_extention = $image->getClientOriginalExtension();
+            $file_name = Carbon::now()->timestamp . '.' . $file_extention;
+    
+            $this->GenerateBrandThumbailsImage($image, $file_name);
+    
+            $brand->image = $file_name;
+        }
+    
+        $brand->save();
+    
+        return redirect()->route('admin.brands')->with('status', 'Brand has been updated successfully!');
+    }
+    
     public function GenerateBrandThumbailsImage($image, $imageName)
     {
         $destinationPath = public_path('uploads/brands');
-        $img = Image::read($image-> path); 
+        $img = Image::read($image-> path()); 
         $img->cover(124,124,"top");
         $img->resize(124,124,function ($constraint) {
             $constraint->aspectRatio();
-        })->save($destinationPath.'/'/$imageName);
+        })->save($destinationPath . '/' . $imageName);
+
     }
 }
