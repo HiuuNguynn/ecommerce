@@ -123,11 +123,11 @@ class AdminController extends Controller
     }
 
 
-    public function caterory_store(Request $request)
+    public function category_store(Request $request)
     {
         $request -> validate([
             'name' => 'required',
-            'slug' => 'required|unique:caterories,slug',
+            'slug' => 'required|unique:categories,slug',
             'image' => 'mimes:png,jpg,jpeg|max:2048'
         ]);
 
@@ -137,10 +137,21 @@ class AdminController extends Controller
         $image = $request->file('image');
         $file_extention = $request->file('image')->extension();
         $file_name = Carbon::now()->timestamp.'.'.$file_extention;
-        $this->GenerateBrandThumbailsImage($image,$file_name);
+        $this->GenerateCategoryThumbailsImage($image,$file_name);
         $category->image = $file_name;
         $category->save();
-        return redirect()->route('admin.brands')->with('status','Brand has been added succesfully!');
+        return redirect()->route('admin.categories')->with('status','Category has been added succesfully!');
 
     }
-}
+
+    public function GenerateCategoryThumbailsImage($image, $imageName)
+    {
+        $destinationPath = public_path('uploads/categories');
+        $img = Image::read($image-> path()); 
+        $img->cover(124,124,"top");
+        $img->resize(124,124,function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imageName);
+
+    }
+}  
