@@ -211,4 +211,54 @@ class AdminController extends Controller
         return view('admin.products', compact('products'));
     }
 
+    public function product_add() 
+    {
+        $categories = Category::select('id','name')->orderBy('name') ->get();
+        $brands = Brand::select('id', 'name') -> orderBy('name') -> get();
+        return view('admin.product-add', compact('categories','brands'));
+    }
+
+    public function product_store(Request $request)
+    {
+        $request->validate([
+            'name' =>'required',
+            'slug' =>'required|unique:product,slug',
+            'short_description' =>'required',
+            'description' =>'required',
+            'regular_price' =>'required',
+            'sale_price' =>'required',
+            'SKU' =>'required',
+            'stock_status' =>'required',
+            'featured' =>'required',
+            'quantity' =>'required',
+            'image' =>'required|minmes:png,jpg,jpeg|max:2048',
+            'category_id' =>'required',
+            'brand_id' =>'required',
+        ]);
+
+        $product = new Product();
+        $product -> name = $request->name;
+        $product -> slug = Str::slug(($request->name));
+        $product -> short_description = $request->short_description;
+        $product -> description = $request->description;
+        $product -> regular_price = $request -> regular_price;
+        $product -> sale_price = $request -> sale_price;
+        $product -> SKU = $request -> SKU;
+        $product -> stock_status = $request -> stock_status;
+        $product -> featured = $request -> featured;
+        $product -> quantity = $request -> quantity;
+        $product -> category_id = $request -> category_id;
+        $product -> brand_id = $request -> brand_id;
+
+        $current_timestamp = Carbon::now() -> timespan;
+
+        if($request->hasFile('image'))
+        {
+            $image = $request->file('image');
+            $imageName = $current_timestamp .'.'. $image->extension();
+            $product->imgage = $imageName; 
+        }
+
+    }
+
 }  
