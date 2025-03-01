@@ -67,12 +67,12 @@
                                 <td><a href="#" target="_blank">0</a></td>
                                 <td>
                                     <div class="list-icon-function">
-                                        <a href="{{ route('admin.brand.edit', ['id' => $category->id]) }}">
+                                        <a href="{{ route('admin.category.edit', ['id' => $category->id]) }}">
                                             <div class="item edit">
                                                 <i class="icon-edit-3"></i>
                                             </div>
                                         </a>
-                                        <form action="#" method="POST" class="delete-form">
+                                        <form action="{{ route('admin.category.delete', ['id' => $category->id]) }}" method="POST" class="delete-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="item text-danger delete-button">

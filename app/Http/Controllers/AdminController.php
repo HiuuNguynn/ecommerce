@@ -154,4 +154,54 @@ class AdminController extends Controller
         })->save($destinationPath . '/' . $imageName);
 
     }
+
+    public function category_edit($id)
+    {
+        $category = Category::find($id);
+        return view('admin.category-edit', compact('category'));
+    }
+
+    public function category_update(Request $request) 
+    {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:categories,slug,' . $request->id,
+            'image' => 'mimes:png,jpg,jpeg|max:2048'
+        ]);
+    
+        $category = Category::find($request->id);
+        $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
+    
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($category->image && File::exists(public_path('uploads/categories/' . $category->image))) {
+                File::delete(public_path('uploads/categories/' . $category->image));
+            }
+    
+            $image = $request->file('image');
+            $file_extention = $image->getClientOriginalExtension();
+            $file_name = Carbon::now()->timestamp . '.' . $file_extention;
+    
+            $this->GenerateCategoryThumbailsImage($image, $file_name);
+    
+            $category->image = $file_name;
+        }
+    
+        $category->save();
+    
+        return redirect()->route('admin.categories')->with('status', 'Catergory has been updated successfully!');
+    }
+
+    public function category_delete($id) 
+    {
+        $category = Category::find($id);
+        if(File::exists(public_path('uploads/categories').'/'.$category->image))
+        {
+            File::delete(public_path('uploads/categories').'/'.$category->image);
+        }
+        $category->delete();
+        return redirect()->route('admin.categories') -> with('status','Cattegory has been deleted successfully!');
+    }
+
 }  
