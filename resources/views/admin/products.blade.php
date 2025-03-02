@@ -37,6 +37,9 @@
                         class="icon-plus"></i>Add new</a>
             </div>
             <div class="table-responsive">
+                @if (Session::has('status'))
+                 <p class="alert alert-success">{{ Session::get('status')}}</p>
+            @endif
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -59,7 +62,7 @@
                             <td>{{ $product->id }}</td>
                             <td class="pname">
                                 <div class="image">
-                                    <img src="{{ asset('uploads/products/thumbnails') }}/{{ $products->image }}" alt="{{ $products->name }}" class="image">
+                                    <img src="{{ asset('uploads/products/thumbnails') }}/{{ $product->image }}" alt="{{ $product->name }}" class="image">
                                 </div>
                                 <div class="name">
                                     <a href="#" class="body-title-2">{{ $product->name }}</a>
