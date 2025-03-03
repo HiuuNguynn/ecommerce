@@ -33,7 +33,7 @@
                         </div>
                     </form>
                 </div>
-                <a class="tf-button style-1 w208" href="{{ route('admin.products.add') }}"><i
+                <a class="tf-button style-1 w208" href="{{ route('admin.product.add') }}"><i
                         class="icon-plus"></i>Add new</a>
             </div>
             <div class="table-responsive">
@@ -69,8 +69,8 @@
                                     <div class="text-tiny mt-3">{{ $product->slug }}</div>
                                 </div>
                             </td>
-                            <td>{{ $product->regular_price}}</td>
-                            <td>{{ $product->sale_price}}</td>
+                            <td>${{ $product->regular_price}}</td>
+                            <td>${{ $product->sale_price}}</td>
                             <td>{{ $product->SKU}}</td>
                             <td>{{ $product->category->name}}</td>
                             <td>{{ $product->brand->name}}</td>
@@ -84,7 +84,7 @@
                                             <i class="icon-eye"></i>
                                         </div>
                                     </a>
-                                    <a href="#">
+                                    <a href="{{ route('admin.product.edit',['id' => $product->id]) }}">
                                         <div class="item edit">
                                             <i class="icon-edit-3"></i>
                                         </div>
