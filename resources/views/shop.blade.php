@@ -335,12 +335,13 @@
             <option value="102" {{ $size==102 ? 'selected':'' }}>102</option>
           </select>
 
-          <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Sort Items" name="orderBy" id= "orderBy">
-              <option value="-1" {{ $order == -1  ? 'select' : '' }}>Default </option>
-              <option value="1" {{ $order == 1  ? 'select' : '' }}>Date, New To Old</option>
-              <option value="2" {{ $order == 2  ? 'select' : '' }}>Date, Old To New</option>
-              <option value="3" {{ $order == 3  ? 'select' : '' }}>Price, Low To High</option>
-              <option value="4" {{ $order == 4  ? 'select' : '' }}>Price, High To Low</option>
+          <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Sort Items" name="orderby" id= "orderby">
+            <option value="-1" {{ $order == -1 ? 'selected' : '' }}>Default</option>
+            <option value="1" {{ $order == 1 ? 'selected' : '' }}>Date, New To Old</option>
+            <option value="2" {{ $order == 2 ? 'selected' : '' }}>Date, Old To New</option>
+            <option value="3" {{ $order == 3 ? 'selected' : '' }}>Price, Low To High</option>
+            <option value="4" {{ $order == 4 ? 'selected' : '' }}>Price, High To Low</option>
+
             </select>
 
             <div class="shop-asc__seprator mx-3 bg-light d-none d-md-block order-md-0"></div>
@@ -459,7 +460,8 @@
   </main>
   <form action="{{ route('shop.index') }}" method="GET" id="frmfilter">
     <input type="hidden" name="page" value="{{ $products->currentPage() }}">
-    <input type="hidden" name="size" id="size" value="{{ $size }}">
+    <input type="hidden" name="size" id="size" value="{{ $size }}"/>
+    <input type="hidden" name="order" id ="order" value = "{{ $order }}" />
 </form>
 
 @push('scripts')
@@ -469,6 +471,11 @@
             $("#size").val($("#pagesize option:selected").val());
             $("#frmfilter").submit();
         });
+
+        $("#orderby").on("change", function() {
+          $("#order").val($("#orderby option:selected").val());
+          $("#frmfilter").submit();
+        })
     });
 </script>
 @endpush
