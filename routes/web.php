@@ -71,4 +71,5 @@ Route::middleware(['auth', AuthAdmin::class]) -> group(function () {
     Route::get('/admin/product/edit/{id}',  [AdminController::class,'product_edit'])->name('admin.product.edit');
     Route::delete('/admin/product/{id}/delete', [AdminController::class,'product_delete'])->name('admin.product.delete');
 
+    Route::get('admin/coupons',[AdminController::class,'coupons'])->name('admin.coupons');
 }); 
