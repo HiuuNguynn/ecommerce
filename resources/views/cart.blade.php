@@ -4,6 +4,9 @@
   .text-success {
     color: #299e00 !important;
   }
+  .text-danger {
+    color: #b6180b !important;
+}
 </style>
 <main class="pt-90">
     <div class="mb-4 pb-4"></div>
@@ -102,11 +105,20 @@
             </tbody>
           </table>
           <div class="cart-table-footer">
+            @if (!Session::has('coupon'))
             <form action="{{route('cart.coupon.apply')}}" method="POST" class="position-relative bg-body">
               @csrf
-              <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code" value="@if (Session::has('coupon')) {{Session::get('coupon')['code']}} Applied! @endif">
+              <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code" value="">
               <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit" value="APPLY COUPON">
             </form>
+            @else
+              <form action="{{route('cart.coupon.remove')}}" method="POST" class="position-relative bg-body">
+                @csrf
+                @method('DELETE')
+                <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code" value="@if (Session::has('coupon')) {{Session::get('coupon')['code']}} Applied! @endif">
+                <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit" value="REMOVE COUPON">
+              </form>
+            @endif
             <form method="POST" action="{{ route('cart.item.clear') }}">
               @csrf
               @method('DELETE')
