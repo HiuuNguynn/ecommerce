@@ -208,7 +208,7 @@ class CartController extends Controller
       Session::forget('coupon');
       Session::forget('discounts');
       Session::put('order_id', $order->id);
-      return redirect()->route('cart.order.confirmation');
+      return redirect()->route('cart.order.confirmation', compact('order'));
    }
 
 
