@@ -174,6 +174,7 @@ class CartController extends Controller
       $order->landmark = $address->landmark;
       $order->zip = $address->zip;
       $order->save();
+      
       foreach(Cart::instance('cart')->content() as $item)
       {
          $orderItem = new OrderItem();
