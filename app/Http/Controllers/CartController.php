@@ -138,7 +138,7 @@ class CartController extends Controller
             'city' => 'required',
             'address' => 'required',
             'locality' => 'required',
-            'lanmark' => 'required',
+            'landmark' => 'required',
          ]);
 
          $address = new Address();
@@ -156,14 +156,14 @@ class CartController extends Controller
          $address->save();
       }
 
-      $this->setAmountforCheckout();
+      $this->setAmountForCheckout();
 
       $order = new Order();
       $order->user_id = $user_id;
-      $order->subtotal = Session::get('checkout')['subtotal'];
-      $order->discount = Session::get('checkout')['discount'];
-      $order->tax = Session::get('checkout')['tax'];
-      $order->total = Session::get('checkout')['total'];
+      $order->subtotal = session()->get('checkout')['subtotal'];
+      $order->discount = session()->get('checkout')['discount'];
+      $order->tax = session()->get('checkout')['tax'];
+      $order->total = session()->get('checkout')['total'];
       $order->name = $address->name;
       $order->phone = $address->phone;
       $order->locality = $address->locality;
@@ -172,7 +172,7 @@ class CartController extends Controller
       $order->state = $address->state;
       $order->country = $address->country;
       $order->landmark = $address->landmark;
-      $order->zip = $address->city;
+      $order->zip = $address->zip;
       $order->save();
 
       foreach(Cart::instance('cart')->content() as $item)
@@ -208,11 +208,11 @@ class CartController extends Controller
       Session::forget('coupon');
       Session::forget('discounts');
       Session::put('order_id', $order->id);
-      return redirect()->route('cart.order.confirmation');
+      return redirect()->route('cart.order.confirmation', compact('order'));
    }
 
 
-   public function setAmountforCheckout()
+   public function setAmountForCheckout()
    {
       if(!Cart::instance('cart')->content()->count() > 0)
       {
@@ -235,8 +235,9 @@ class CartController extends Controller
             'subtotal' => Cart::instance('cart')->subtotal(),
             'tax' => Cart::instance('cart')->tax(),
             'total' => Cart::instance('cart')->total(),
-         ]);
+         ]);  
       }
+      // dd(Session::all());
    }
 
    public function order_confirmation()
