@@ -292,7 +292,7 @@
                                                     <img src="images/avatar/user-1.png" alt="">
                                                 </span>
                                                 <span class="flex flex-column">
-                                                    <span class="body-title mb-2">Kristin Watson</span>
+                                                    <span class="body-title mb-2">Tuấn Anh</span>
                                                     <span class="text-tiny">Admin</span>
                                                 </span>
                                             </span>

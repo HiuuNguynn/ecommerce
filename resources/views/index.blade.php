@@ -231,8 +231,8 @@
                 Starting at $19
               </div>
               <div class="category-banner__item-content">
-                <h3 class="mb-0">Blazers</h3>
-                <a href="#" class="btn-link default-underline text-uppercase fw-medium">Shop Now</a>
+                <h3 class="mb-0">Áo sơ mi</h3>
+                <a href="{{route('shop.index')}}" class="btn-link default-underline text-uppercase fw-medium">Shop Now</a>
               </div>
             </div>
           </div>
@@ -244,8 +244,8 @@
                 Starting at $19
               </div>
               <div class="category-banner__item-content">
-                <h3 class="mb-0">Sportswear</h3>
-                <a href="#" class="btn-link default-underline text-uppercase fw-medium">Shop Now</a>
+                <h3 class="mb-0">áo khoác</h3>
+                <a href="{{route('shop.index')}}" class="btn-link default-underline text-uppercase fw-medium">Shop Now</a>
               </div>
             </div>
           </div>
