@@ -50,7 +50,19 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => [
+            'required',
+            'string',
+            'email',
+            'max:255',
+            'unique:users',
+            function ($attribute, $value, $fail) {
+                $localPart = explode('@', $value)[0]; // Get the part before '@'
+                if (strlen($localPart) < 6) {
+                    $fail('The email must have at least 6 characters before "@".');
+                }
+            },
+        ],
             'mobile' => ['required', 'digits:10', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
